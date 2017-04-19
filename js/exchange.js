@@ -1,11 +1,20 @@
-function getExchange(homeCountry, destCountry) {
+const exchangeRatePlease = require('./../js/calculator.js').exchangeRatePlease;
+const getCurrencyAbbreviation = require('./../node_modules/country-currency-map').getCurrencyAbbreviation;
 
-  $.get('http://api.fixer.io/latest?base='+homeCountry+'&symbols='+homeCountry+','+destCountry).then(function(response) {
-    $('#infoBox').text('There are '+Object.values(response.rates)+' '+homeCountry+' to every '+destCountry);
+let homeAbb;
+let destAbb;
+let exchangeRate;
+
+
+function getExchange(homeCountry, homeAbb, destCountry, destAbb) {
+  exchangeRate = exchangeRatePlease();
+  $.get('http://api.fixer.io/latest?base='+homeAbb+'&symbols='+homeAbb+','+destAbb).then(function(response) {
+    $('#infoBox').text('There are '+exchangeRate+' '+destCountry+' to every '+homeCountry);
   }).fail(function(error) {
     $('#infoBox').text('There was an error');
   });
-};
+
+}
 
 
 exports.exchangeModule = getExchange;
