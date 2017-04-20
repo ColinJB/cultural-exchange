@@ -7,25 +7,26 @@ let neededPerMonthForTrip
 let saveTimeForTrip
 let spendingMoneyPerMonthOnTrip
 let totalAmountNeededForTrip
-let exchangeRate
-let homeAbb
-let destAbb
 let exchangeRateArray = []
+let destAbbv;
+let homeAbbv;
 
-function exchangeRatePlease() {
-  $.get('http://api.fixer.io/latest?base='+homeAbb+'&symbols='+homeAbb+','+destAbb).then(function(response2) {
+function exchangeRatePlease(countryName1, countryName2) {
+  debugger;
+  homeAbbv = getCurrencyAbbreviation(countryName1);
+  destAbbv = getCurrencyAbbreviation(countryName2);
+  $.get('http://api.fixer.io/latest?base='+homeAbbv+'&symbols='+homeAbbv+','+destAbbv).then(function(response2) {
     exchangeRateArray.push(parseFloat(Object.values(response2.rates)[0]))
+    console.log(parseFloat(Object.values(response2.rates)[0]))
   }).fail(function(error) {
     console.log("exchangeRatePlease failed")
-  });
+  })
   return exchangeRateArray[0]
-
+  console.log(exchangeRateArray[0])
 }
 
 
 function calculate(income, expenses, timeLength, homeCountry, destCountry, exchangeRate) {
-  homeAbb = getCurrencyAbbreviation(homeCountry)
-  destAbb = getCurrencyAbbreviation(destCountry)
 
   costConvert = (costOfLiving[destCountry])/(costOfLiving[homeCountry])
   netPerMonthAtHome = (income/12)-expenses
@@ -36,7 +37,7 @@ function calculate(income, expenses, timeLength, homeCountry, destCountry, excha
   spendingMoneyPerMonthOnTrip = (expenses / exchangeRate) / costConvert
   totalAmountNeededForTrip = neededPerMonthForTrip * timeLength
 
-  console.log(exchangeRate, costConvert, netPerMonthAtHome, neededPerMonthForTrip, saveTimeForTrip, spendingMoneyPerMonthOnTrip, totalAmountNeededForTrip)
+  // console.log(exchangeRate, costConvert, netPerMonthAtHome, neededPerMonthForTrip, saveTimeForTrip, spendingMoneyPerMonthOnTrip, totalAmountNeededForTrip)
 }
 
 exports.calculate = calculate;
